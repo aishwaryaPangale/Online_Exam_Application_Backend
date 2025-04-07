@@ -4,22 +4,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Model.Register;
-import com.example.demo.Repository.RegisterRepo;
+import com.example.demo.Repository.RegisterRepoImpl;
+
 
 @Service
-public class RegisterServiceImpl implements RegisterService{
+public class RegisterServiceImpl{
 
 	@Autowired
-	private RegisterRepo regRepo;
+	private RegisterRepoImpl regRepo;
 
+	 public String register(Register student) {
+	        if (regRepo.emailExists(student.getEmail())) {
+	            return "Email already exists";
+	        }
+	        regRepo.saveStudent(student);
+	        return "Success";
+	    }
 
-	public String registerUser(Register user) {
-        if (regRepo.isEmailRegistered(user.getEmail(), user.getRole())) {
-            return "Email already exists";
-        }
-        regRepo.saveUser(user);
-        return "User registered successfully";
-    }
+	    public boolean login(String email, String username, String password) {
+	        return regRepo.validateLogin(email, username, password);
+	    }
 
 
 	
