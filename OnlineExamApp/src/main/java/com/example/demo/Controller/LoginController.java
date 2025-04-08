@@ -35,8 +35,8 @@ public class LoginController {
         }
 
         String otp = otpService.generateOtp(email);
-        emailService.sendOtpEmail(email, otp);  // ✅ Now sending OTP
-        System.out.println("OTP for " + email + " is: " + otp);
+        loginService.updateOtpByEmail(email, otp);
+        emailService.sendOtpEmail(email, otp);
 
         return ResponseEntity.ok(Map.of("message", "✅ OTP sent to your email!"));
     }
