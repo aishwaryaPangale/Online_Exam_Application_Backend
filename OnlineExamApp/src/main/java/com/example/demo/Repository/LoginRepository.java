@@ -35,4 +35,9 @@ public class LoginRepository {
         String sql = "SELECT * FROM students WHERE email = ? AND username = ? AND password = ?";
         return jdbcTemplate.query(sql, this::mapRow, email, username, password);
     }
+
+    public void updateOtpByEmail(String email, String otp) {
+        String sql = "UPDATE students SET otp = ? WHERE email = ?";
+        jdbcTemplate.update(sql, otp, email);
+    }
 }
