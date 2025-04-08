@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api/courses")
 @CrossOrigin(origins = "http://localhost:3000")
 public class CourseController {
-
+//Hello
     private final CourseRepository courseRepository;
 
     public CourseController(CourseRepository courseRepository) {
