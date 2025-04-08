@@ -1,43 +1,48 @@
 package com.example.demo.Repository;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.Model.Course;
 
-import java.util.List;
-
 @Repository
 public class CourseRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-    public CourseRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public int addCourse(Course course) {
+        String sql = "INSERT INTO course (course_name, course_type, course_duration, course_content) VALUES (?, ?, ?, ?)";
+        return jdbcTemplate.update(sql, course.getCourseName(), course.getCourseType(), course.getCourseDuration(), course.getCourseContent());
     }
 
     public List<Course> getAllCourses() {
-        return jdbcTemplate.query("SELECT * FROM courses",
-            (rs, rowNum) -> new Course(rs.getInt("id"), rs.getString("name"), rs.getString("description")));
+        String sql = "SELECT * FROM course";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Course.class));
     }
 
-    public int addCourse(Course course) {
-        return jdbcTemplate.update("INSERT INTO courses (name, description) VALUES (?, ?)",
-                course.getName(), course.getDescription());
+    public Course getCourseById(int id) {
+        String sql = "SELECT * FROM course WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Course.class), id);
     }
 
-    public int updateCourse(int id, Course course) {
-        return jdbcTemplate.update("UPDATE courses SET name = ?, description = ? WHERE id = ?",
-                course.getName(), course.getDescription(), id);
+    public int updateCourse(Course course) {
+        String sql = "UPDATE course SET course_name=?, course_type=?, course_duration=?, course_content=? WHERE id=?";
+        return jdbcTemplate.update(sql, course.getCourseName(), course.getCourseType(), course.getCourseDuration(), course.getCourseContent(), course.getId());
     }
 
     public int deleteCourse(int id) {
-        return jdbcTemplate.update("DELETE FROM courses WHERE id = ?", id);
+        String sql = "DELETE FROM course WHERE id=?";
+        return jdbcTemplate.update(sql, id);
     }
 
-    public List<Course> searchCourses(String keyword) {
-        String sql = "SELECT * FROM courses WHERE name LIKE ?";
-        return jdbcTemplate.query(sql, new Object[]{"%" + keyword + "%"},
-            (rs, rowNum) -> new Course(rs.getInt("id"), rs.getString("name"), rs.getString("description")));
+    public List<Course> searchByName(String name) {
+        String sql = "SELECT * FROM course WHERE course_name LIKE ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Course.class), "%" + name + "%");
     }
 }
+

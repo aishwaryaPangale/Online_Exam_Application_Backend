@@ -2,19 +2,15 @@ package com.example.demo.Model;
 
 import lombok.Data;
 
-@Data
+@Data	
 public class Course {
     private int id;
-    private String name;
-    private String description;
+    private String courseName;
+    private String courseType;
+    private String courseDuration;
+    private String courseContent;
 
-    public Course() {}
-
-    public Course(int id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-    }
-
+    // Getters and Setters
 }
+
 
