@@ -20,7 +20,7 @@ import com.example.demo.Repository.CourseRepository;
 
 @RestController
 @RequestMapping("/api/courses")
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:5175")
 public class CourseController {
 
     @Autowired

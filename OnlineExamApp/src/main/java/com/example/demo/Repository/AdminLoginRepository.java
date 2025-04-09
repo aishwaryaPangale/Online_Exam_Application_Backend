@@ -10,7 +10,7 @@ public class AdminLoginRepository {
     private JdbcTemplate jdbcTemplate;
 
     public boolean validateAdmin(String username, String password) {
-        String sql = "SELECT COUNT(*) FROM admin WHERE username = ? AND password = ?";
+        String sql = "SELECT COUNT(*) FROM admin_table WHERE username = ? AND password = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, username, password);
         return count != null && count > 0;
     }
