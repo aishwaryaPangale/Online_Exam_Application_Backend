@@ -11,7 +11,7 @@ import com.example.demo.Services.RegisterServiceImpl;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:5174") // allow frontend port
+@CrossOrigin(origins = "http://localhost:5173") // allow frontend port
 public class RegisterController {
 
     @Autowired
