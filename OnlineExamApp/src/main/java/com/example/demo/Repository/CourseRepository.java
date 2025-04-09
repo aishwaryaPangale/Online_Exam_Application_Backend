@@ -25,11 +25,7 @@ public class CourseRepository {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Course.class));
     }
 
-    public Course getCourseById(int id) {
-        String sql = "SELECT * FROM course WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Course.class), id);
-    }
-
+  
     public int updateCourse(Course course) {
         String sql = "UPDATE course SET course_name=?, course_type=?, course_duration=?, course_content=? WHERE id=?";
         return jdbcTemplate.update(sql, course.getCourseName(), course.getCourseType(), course.getCourseDuration(), course.getCourseContent(), course.getId());
