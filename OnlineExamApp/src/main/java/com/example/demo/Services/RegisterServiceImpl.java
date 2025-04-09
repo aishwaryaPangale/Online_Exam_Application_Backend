@@ -1,5 +1,7 @@
 package com.example.demo.Services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +24,25 @@ public class RegisterServiceImpl {
 
     public boolean login(String email, String username, String password) {
         return regRepo.validateLogin(email, username, password);
+    }
+    
+    
+    //curd operation
+    public List<Register> getAllStudents() {
+        return regRepo.getAllStudents();
+    }
+
+    public Register getStudentById(int id) {
+        return regRepo.getStudentById(id);
+    }
+
+
+    public void updateStudent(int id, Register student) {
+        student.setId(id);
+        regRepo.updateStudent(student);
+    }
+
+    public void deleteStudent(int id) {
+    	regRepo.deleteStudent(id);
     }
 }
