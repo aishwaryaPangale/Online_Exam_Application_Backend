@@ -22,12 +22,12 @@ public class RegisterRepoImpl {
     }
 
     public boolean saveStudent(Register student) {
-        String sql = "INSERT INTO students (name, email, contact, address, course, birthdate, gender, username, password) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO students (name, email, contact, address, course, birthdate, gender, username, password,batch) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         int rowsAffected = jdbcTemplate.update(sql,
                 student.getName(), student.getEmail(), student.getContact(),
                 student.getAddress(), student.getCourse(), student.getBirthdate(),
-                student.getGender(), student.getUsername(), student.getPassword());
+                student.getGender(), student.getUsername(), student.getPassword(),student.getBatch());
 
         return rowsAffected > 0; // ✅ This line was missing
     }

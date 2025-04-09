@@ -14,5 +14,6 @@ public class Register {
     private String gender;
     private String username;
     private String password;
-    private String otp; // optional for now
+    private String otp;
+    private String batch;// optional for now
 }
