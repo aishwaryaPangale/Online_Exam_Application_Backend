@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Model.Test;
@@ -18,7 +19,7 @@ import com.example.demo.Services.TestService;
 
 @RestController
 @RequestMapping("/api/tests")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TestController {
 
     @Autowired
@@ -44,6 +45,10 @@ public class TestController {
     public ResponseEntity<String> disableTest(@PathVariable int id) {
         testService.disableTest(id);
         return ResponseEntity.ok("Test disabled successfully");
+    }
+    @GetMapping("/search")
+    public List<Test> searchTests(@RequestParam String keyword) {
+        return testService.searchTests(keyword);
     }
 }
 	
