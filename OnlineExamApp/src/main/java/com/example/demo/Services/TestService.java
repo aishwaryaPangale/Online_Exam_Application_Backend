@@ -28,4 +28,7 @@ public class TestService {
         return testRepository.getEnabledTests();
     }
 
+    public List<Test> searchTests(String keyword) {
+       return testRepository.searchTests(keyword);
+    }
 }

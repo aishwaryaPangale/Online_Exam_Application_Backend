@@ -35,6 +35,11 @@ public class TestRepository {
         return jdbcTemplate.query(sql, new TestRowMapper());
     }
 
+    public List<Test> searchTests(String keyword) {
+        String sql = "SELECT * FROM tests WHERE LOWER(batch) LIKE ? OR LOWER(subject) LIKE ?";
+        String likePattern = "%" + keyword.toLowerCase() + "%";
+        return jdbcTemplate.query(sql, new Object[]{likePattern, likePattern}, new TestRowMapper());
+    }
 
     private static class TestRowMapper implements RowMapper<Test> {
         @Override
