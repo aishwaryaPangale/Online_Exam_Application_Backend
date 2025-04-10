@@ -1,7 +1,11 @@
 package com.example.demo.Controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +21,14 @@ public class AddQuestionController {
 	 @Autowired
 	    private AddQuestionService service;
 
-	    @PostMapping
-	    public void addQuestion(@RequestBody AddQuestion question) {
-	        // For MCQ, convert list to JSON string if needed
-	        if ("MCQ".equalsIgnoreCase(question.getType()) && question.getOptions() == null) {
-	            question.setOptions("[]");
-	        }
+	 @PostMapping("/add")
+	    public ResponseEntity<String> addQuestion(@RequestBody AddQuestion question) {
 	        service.addQuestion(question);
+	        return ResponseEntity.ok("Question added");
+	    }
+
+	    @GetMapping("/all")
+	    public List<AddQuestion> getAllQuestions() {
+	        return service.getAllQuestions();
 	    }
 }

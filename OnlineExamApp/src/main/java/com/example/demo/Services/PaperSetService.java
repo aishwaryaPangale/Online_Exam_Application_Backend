@@ -1,8 +1,11 @@
 package com.example.demo.Services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.Model.AddQuestion;
 import com.example.demo.Model.PaperSet;
 import com.example.demo.Repository.PaperSetRepository;
 
@@ -11,9 +14,13 @@ public class PaperSetService {
 	@Autowired
     private PaperSetRepository repository;
 
-    public PaperSet createPaperSet(PaperSet paperSet) {
-        int generatedId = repository.save(paperSet);
-        paperSet.setId(generatedId);
-        return paperSet;
+	public void assignQuestionsToTest(int testId, List<Integer> questionIds) {
+        for (int questionId : questionIds) {
+        	repository.insertTestQuestionMapping(testId, questionId);
+        }
+    }
+	
+	public List<AddQuestion> getAllQuestions() {
+        return repository.findAll();
     }
 }

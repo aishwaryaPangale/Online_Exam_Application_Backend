@@ -1,10 +1,12 @@
 package com.example.demo.Model;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
 public class PaperSet {
-	private int id;
-    private String paperName;
-    private String subject;
+	private int testId;
+    private List<Integer> questionIds;
+
 }
