@@ -1,14 +1,16 @@
 package com.example.demo.Model;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
 public class AddQuestion {
 	 private int id;
-	 private int paperSetId;
-	 private String type;
-	 private String questionText;
-	 private String correctAnswer;
-	 private String options; // store as comma-separated or JSON string
-
+	    private String question;
+	    private String optionA;
+	    private String optionB;
+	    private String optionC;
+	    private String optionD;
+	    private String correctAnswer;
 }
