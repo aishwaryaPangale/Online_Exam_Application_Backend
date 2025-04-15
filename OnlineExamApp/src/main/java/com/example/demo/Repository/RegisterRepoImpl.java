@@ -67,5 +67,13 @@ public class RegisterRepoImpl {
                 student.getCourse(), student.getBatch(), student.getUsername(), student.getPassword(),
                 student.getId());
     }
+    
+    public Register getStudentByUsername(String username) {
+        String sql = "SELECT * FROM students WHERE username = ?";
+        List<Register> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Register.class), username);
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+
 }
 
