@@ -53,8 +53,14 @@ public class TestRepository {
             test.setMode(rs.getString("mode"));
             test.setDisabled(rs.getBoolean("disabled"));
             test.setAction(rs.getBoolean("action"));
+            test.setIspaperSet(rs.getBoolean("ispaperSet"));
             return test;
         }
+    }
+    
+    public void paperAsSet(int testId) {
+        String sql = "UPDATE test SET isPaperSet = 1 WHERE id = ?";
+        jdbcTemplate.update(sql, testId);
     }
 }
 

@@ -12,4 +12,5 @@ public class Test {
     private String mode;
     private boolean disabled;
     private boolean action; 
+    private boolean ispaperSet;
 }

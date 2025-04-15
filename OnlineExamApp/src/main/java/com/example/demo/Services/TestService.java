@@ -31,4 +31,8 @@ public class TestService {
     public List<Test> searchTests(String keyword) {
        return testRepository.searchTests(keyword);
     }
+    
+    public void setPaperSet(int testId) {
+        testRepository.paperAsSet(testId);
+    }
 }

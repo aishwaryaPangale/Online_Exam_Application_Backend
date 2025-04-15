@@ -14,11 +14,20 @@ public class PaperSetService {
 	@Autowired
     private PaperSetRepository repository;
 
+//	public void assignQuestionsToTest(int testId, List<Integer> questionIds) {
+//        for (int questionId : questionIds) {
+//        	repository.insertTestQuestionMapping(testId, questionId);
+//        }
+//    }
+	
 	public void assignQuestionsToTest(int testId, List<Integer> questionIds) {
-        for (int questionId : questionIds) {
-        	repository.insertTestQuestionMapping(testId, questionId);
-        }
-    }
+      for (int questionId : questionIds) {
+      	repository.insertTestQuestionMapping(testId, questionId);
+      }
+      
+      repository.updateIsPaperSetFlag(testId);
+
+  }
 	
 	public List<AddQuestion> getAllQuestions() {
         return repository.findAll();
