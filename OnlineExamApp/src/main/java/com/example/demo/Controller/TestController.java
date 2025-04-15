@@ -50,5 +50,11 @@ public class TestController {
     public List<Test> searchTests(@RequestParam String keyword) {
         return testService.searchTests(keyword);
     }
+    
+    @PutMapping("/set-paper/{id}")
+    public ResponseEntity<Void> paperAsSet(@PathVariable int id) {
+        testService.setPaperSet(id);
+        return ResponseEntity.ok().build();
+    }
 }
 	

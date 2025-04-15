@@ -20,15 +20,15 @@ import com.example.demo.Services.PaperSetService;
 public class PaperSetController {
 	@Autowired
     private PaperSetService service;
-
+	
 	@PostMapping("/assignQuestions")
     public String assignQuestionsToTest(@RequestBody PaperSet request) {
-		service.assignQuestionsToTest(request.getTestId(), request.getQuestionIds());
-        return "✅ Questions assigned to test successfully!";
+	   service.assignQuestionsToTest(request.getTestId(), request.getQuestionIds());
+       return "✅ Questions assigned to test successfully!";
     }
 	
 	 @GetMapping("/questions/all")
-	    public List<AddQuestion> getAllQuestions() {
-	        return service.getAllQuestions();
-	    }
+	 public List<AddQuestion> getAllQuestions() {
+	    return service.getAllQuestions();
+	 }
 }
