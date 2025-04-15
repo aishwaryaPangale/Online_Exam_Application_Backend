@@ -62,4 +62,14 @@ public class RegisterController {
     	registerRepository.deleteStudent(id);
         return ResponseEntity.ok("Student deleted successfully");
     }
+    @GetMapping("/register/username/{username}")
+    public ResponseEntity<Register> getStudentByUsername(@PathVariable String username) {
+    	Register user = regService.getStudentByUsername(username); // or studentService
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

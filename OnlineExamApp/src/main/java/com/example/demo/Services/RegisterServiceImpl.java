@@ -45,4 +45,8 @@ public class RegisterServiceImpl {
     public void deleteStudent(int id) {
     	regRepo.deleteStudent(id);
     }
+    public Register getStudentByUsername(String username) {
+        return regRepo.getStudentByUsername(username);
+    }
+
 }

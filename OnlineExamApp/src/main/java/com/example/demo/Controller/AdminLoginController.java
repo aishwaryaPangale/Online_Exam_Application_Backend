@@ -1,5 +1,8 @@
 package com.example.demo.Controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +22,16 @@ public class AdminLoginController {
 	@Autowired
     private AdminLoginService adminService;
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AdminLogin adminLogin) {
-        boolean valid = adminService.login(adminLogin.getUsername(), adminLogin.getPassword());
+	@PostMapping("/login")
+	public ResponseEntity<?> loginAdmin(@RequestBody AdminLogin admin) {
+	    AdminLogin existingAdmin = adminService.login(admin.getUsername(), admin.getPassword());
+	    if (existingAdmin != null) {
+	        Map<String, String> response = new HashMap<>();
+	        response.put("username",existingAdmin.getUsername());
+	        return ResponseEntity.ok(response);
+	    } else {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+	    }
+	}
 
-        if (valid) {
-            return ResponseEntity.ok("Login successful");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-        }
-    }
 }
