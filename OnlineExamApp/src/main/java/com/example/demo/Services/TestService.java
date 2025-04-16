@@ -22,14 +22,14 @@ public class TestService {
         return testRepository.getAllTestsWithJoin();
     }
 
-    public void disableTest(int id) {
-        testRepository.disableTest(id);
+    public boolean disableTest(int id) {
+       return testRepository.disableTest(id);
     }
-    public List<Test> getEnabledTests() {
-        return testRepository.getEnabledTests();
-    }
+//    public List<Test> getEnabledTests() {
+//        return testRepository.getEnabledTests();
+//    }
 
-    public List<Test> searchTests(String keyword) {
+    public List<Map<String, Object>> searchTests(String keyword) {
        return testRepository.searchTests(keyword);
     }
     

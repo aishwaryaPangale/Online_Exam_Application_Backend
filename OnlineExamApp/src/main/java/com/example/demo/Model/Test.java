@@ -10,7 +10,7 @@ public class Test {
 	private String date;
 	private String time;
 	private String mode;
-	private boolean disabled;
+	private boolean disable;
 	private boolean action;
 	private boolean ispaperSet;
 }

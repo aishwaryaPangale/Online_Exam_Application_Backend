@@ -20,10 +20,10 @@ public class BatchRepository {
 	        jdbcTemplate.update(sql, batch.getBatchName(), batch.getCourseId());
 	    }
 
-	    public List<Map<String, Object>> getAllBatches() {
-	        String sql =  "SELECT b.batch_name, c.course_name FROM batch b JOIN course c ON b.course_id = c.id";
-	        return jdbcTemplate.queryForList(sql);
-	    }
+	 public List<Map<String, Object>> getAllBatches() {
+		    String sql = "SELECT b.id AS batch_id, b.batch_name, c.course_name FROM batch b JOIN course c ON b.course_id = c.id";
+		    return jdbcTemplate.queryForList(sql);
+		}
 
 	    public List<Batch> searchBatch(String keyword) {
 	        String sql = "SELECT * FROM batch WHERE batch_name LIKE ? OR course_name LIKE ?";

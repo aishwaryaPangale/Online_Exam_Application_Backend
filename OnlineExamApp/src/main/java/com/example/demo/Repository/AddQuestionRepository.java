@@ -14,10 +14,10 @@ public class AddQuestionRepository {
 	@Autowired
     private JdbcTemplate jdbc;
 
-    public void save(AddQuestion q) {
-        String sql = "INSERT INTO questions (question, option_a, option_b, option_c, option_d, correct_answer) VALUES (?, ?, ?, ?, ?, ?)";
-        jdbc.update(sql, q.getQuestion(), q.getOptionA(), q.getOptionB(), q.getOptionC(), q.getOptionD(), q.getCorrectAnswer());
-    }
+	  public void save(AddQuestion question) {
+	        String sql = "INSERT INTO questions (question, option_a, option_b, option_c, option_d, correct_answer) VALUES (?, ?, ?, ?, ?, ?)";
+	        jdbc.update(sql, question.getQuestion(), question.getOptionA(), question.getOptionB(), question.getOptionC(), question.getOptionD(), question.getCorrectAnswer());
+	    }
 
     public List<AddQuestion> findAll() {
         return jdbc.query("SELECT * FROM questions", (rs, rowNum) -> {
