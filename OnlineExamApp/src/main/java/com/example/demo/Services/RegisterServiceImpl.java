@@ -48,5 +48,9 @@ public class RegisterServiceImpl {
     public Register getStudentByUsername(String username) {
         return regRepo.getStudentByUsername(username);
     }
+    
+    public boolean updateStudent(String username, Register updatedStudent) {
+        return regRepo.updateStudentByUsername(username, updatedStudent);
+    }
 
 }

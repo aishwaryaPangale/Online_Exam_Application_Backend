@@ -74,6 +74,24 @@ public class RegisterRepoImpl {
         return list.isEmpty() ? null : list.get(0);
     }
 
+    //update student by name
+    
+    public boolean updateStudentByUsername(String username, Register student) {
+        String sql = "UPDATE students SET name = ?, email = ?, contact = ?, gender = ?, birthdate = ?, course = ?, batch = ?, address = ? WHERE username = ?";
+
+        int rows = jdbcTemplate.update(sql,
+                student.getName(),
+                student.getEmail(),
+                student.getContact(),
+                student.getGender(),
+                student.getBirthdate(),
+                student.getCourse(),
+                student.getBatch(),
+                student.getAddress(),
+                username);
+
+        return rows > 0;
+    }
 
 }
 
