@@ -18,7 +18,7 @@ import com.example.demo.Model.Batch;
 import com.example.demo.Services.BatchService;
 @RestController
 @RequestMapping("/api/batches")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin(origins ="http://localhost:5173")
 public class BatchController {
 
     @Autowired

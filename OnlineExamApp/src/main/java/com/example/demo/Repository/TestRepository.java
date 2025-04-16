@@ -3,11 +3,8 @@ package com.example.demo.Repository;
 import com.example.demo.Model.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -17,52 +14,41 @@ public class TestRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    // Add a new test
     public void addTest(Test test) {
         String sql = "INSERT INTO test (batch_id, course_id, date, time, mode) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, test.getBatchId(), test.getCourseId(), test.getDate(), test.getTime(), test.getMode());
     }
 
+    // Get all tests with join on batch and course
     public List<Map<String, Object>> getAllTestsWithJoin() {
-        String sql = "SELECT t.id, b.batch_name, c.course_name, t.date, t.time, t.mode " +
-                     "FROM test t " +
-                     "JOIN batch b ON t.batch_id = b.id " +
-                     "JOIN course c ON t.course_id = c.id";
+        String sql = "SELECT t.id, b.batch_name, c.course_name, t.date, t.time, t.mode, t.action, t.disable, t.ispaperSet "
+                   + "FROM test t "
+                   + "JOIN batch b ON t.batch_id = b.id "
+                   + "JOIN course c ON t.course_id = c.id";
         return jdbcTemplate.queryForList(sql);
     }
 
-    public void disableTest(int id) {
-        String sql = "UPDATE test SET disabled = true WHERE id = ?";
-        jdbcTemplate.update(sql, id);
-    }
-    public List<Test> getEnabledTests() {
-        String sql = "SELECT * FROM test WHERE disabled = false";
-        return jdbcTemplate.query(sql, new TestRowMapper());
+    // Disable a test by ID
+    public boolean disableTest(int id) {
+        String sql = "UPDATE test SET disable = true WHERE id = ?";
+        return jdbcTemplate.update(sql, id) > 0;
     }
 
-    public List<Test> searchTests(String keyword) {
-        String sql = "SELECT * FROM tests WHERE LOWER(batch) LIKE ? OR LOWER(subject) LIKE ?";
+    // Search tests by keyword (batch or course name)
+    public List<Map<String, Object>> searchTests(String keyword) {
+        String sql = "SELECT t.id, b.batch_name, c.course_name, t.date, t.time, t.mode "
+                   + "FROM test t "
+                   + "JOIN batch b ON t.batch_id = b.id "
+                   + "JOIN course c ON t.course_id = c.id "
+                   + "WHERE LOWER(b.batch_name) LIKE ? OR LOWER(c.course_name) LIKE ?";
         String likePattern = "%" + keyword.toLowerCase() + "%";
-        return jdbcTemplate.query(sql, new Object[]{likePattern, likePattern}, new TestRowMapper());
+        return jdbcTemplate.queryForList(sql, likePattern, likePattern);
     }
 
-    private static class TestRowMapper implements RowMapper<Test> {
-        @Override
-        public Test mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Test test = new Test();
-            test.setId(rs.getInt("id"));
-            test.setDate(rs.getString("date")); 
-            test.setTime(rs.getString("time"));
-            test.setMode(rs.getString("mode"));
-            test.setDisabled(rs.getBoolean("disabled"));
-            test.setAction(rs.getBoolean("action"));
-            test.setIspaperSet(rs.getBoolean("ispaperSet"));
-            return test;
-        }
-    }
-    
+    // Set paper flag as true for a test
     public void paperAsSet(int testId) {
         String sql = "UPDATE test SET isPaperSet = 1 WHERE id = ?";
         jdbcTemplate.update(sql, testId);
     }
 }
-

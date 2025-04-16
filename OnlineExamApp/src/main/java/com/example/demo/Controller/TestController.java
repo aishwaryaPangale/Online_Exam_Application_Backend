@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,24 +35,28 @@ public class TestController {
 
     @GetMapping("/all")
     public List<Map<String, Object>> getAllTests() {
-        return testService.getAllTestsWithJoin();
-    }	
-    @GetMapping("/enabled")
-    public List<Test> getEnabledTests() {
-        return testService.getEnabledTests();
+    	
+    	List <Map<String, Object>> list=testService.getAllTestsWithJoin();
+    	
+    	System.out.println(list);
+        return list;
     }
-
 
     @PutMapping("/disable/{id}")
     public ResponseEntity<String> disableTest(@PathVariable int id) {
-        testService.disableTest(id);
-        return ResponseEntity.ok("Test disabled successfully");
+        boolean isDisabled = testService.disableTest(id);
+        if (isDisabled) {
+            return ResponseEntity.ok("Test disabled successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to disable test");
+        }
     }
+
     @GetMapping("/search")
-    public List<Test> searchTests(@RequestParam String keyword) {
+    public List<Map<String, Object>> searchTests(@RequestParam String keyword) {
         return testService.searchTests(keyword);
     }
-    
+
     @PutMapping("/set-paper/{id}")
     public ResponseEntity<Void> paperAsSet(@PathVariable int id) {
         testService.setPaperSet(id);
