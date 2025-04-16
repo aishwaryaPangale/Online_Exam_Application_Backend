@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TestService {
@@ -17,8 +18,8 @@ public class TestService {
         testRepository.addTest(test);
     }
 
-    public List<Test> getAllTests() {
-        return testRepository.getAllTests();
+    public List<Map<String, Object>> getAllTestsWithJoin() {
+        return testRepository.getAllTestsWithJoin();
     }
 
     public void disableTest(int id) {
