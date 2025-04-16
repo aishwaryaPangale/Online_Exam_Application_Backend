@@ -57,6 +57,20 @@ public class LoginController {
             return ResponseEntity.status(401).body(Map.of("message", "❌ Incorrect credentials!"));
         }
 
-        return ResponseEntity.ok(Map.of("message", "✅ Login successful!"));
+//        return ResponseEntity.ok(Map.of("message", "✅ Login successful!"));
+        
+        Register student = user.get(0); // Get the matched student
+
+        
+        // ✅ Send student info back
+        return ResponseEntity.ok(Map.of(
+            "message", "✅ Login successful!",
+            "name", student.getName(),
+            "username", student.getUsername()
+        ));
+        
+        
     }
+    
+    
 }
