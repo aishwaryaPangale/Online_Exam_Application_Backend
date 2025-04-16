@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +33,9 @@ public class TestController {
     }
 
     @GetMapping("/all")
-    public List<Test> getAllTests() {
-        return testService.getAllTests();
-    }
+    public List<Map<String, Object>> getAllTests() {
+        return testService.getAllTestsWithJoin();
+    }	
     @GetMapping("/enabled")
     public List<Test> getEnabledTests() {
         return testService.getEnabledTests();
