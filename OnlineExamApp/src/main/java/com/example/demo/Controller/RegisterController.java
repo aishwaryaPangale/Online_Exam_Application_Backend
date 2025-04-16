@@ -71,5 +71,16 @@ public class RegisterController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    //update student by name
+    @PutMapping("/register/update/{username}")
+    public ResponseEntity<String> updateStudent(@PathVariable String username, @RequestBody Register updatedStudent) {
+        boolean success = regService.updateStudent(username, updatedStudent);
+        if (success) {
+            return ResponseEntity.ok("Updated successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Update failed");
+        }
+    }
 
 }
