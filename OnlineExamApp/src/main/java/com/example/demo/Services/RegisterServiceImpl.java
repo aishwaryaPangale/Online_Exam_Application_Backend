@@ -37,8 +37,7 @@ public class RegisterServiceImpl {
     }
 
 
-    public void updateStudent(int id, Register student) {
-        student.setId(id);
+    public void updateStudent( Register student) {
         regRepo.updateStudent(student);
     }
 

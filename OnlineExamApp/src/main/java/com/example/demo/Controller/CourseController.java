@@ -18,26 +18,28 @@ public class CourseController {
     private CourseService courseService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addCourse(@RequestBody Course course) {
+    public String addCourse(@RequestBody Course course) {
         courseService.addCourse(course);
-        return ResponseEntity.ok("Course added successfully!");
+        return "Course added successfully!";
     }
+
 
     @GetMapping("/all")
     public List<Course> getAllCourses() {
         return courseService.getAllCourses();
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<String> updateCourse(@RequestBody Course course) {
+    @PutMapping("/update/{id}")
+    public String updateCourse(@PathVariable int id , @RequestBody Course course) {
+    	course.setId(id);
         courseService.updateCourse(course);
-        return ResponseEntity.ok("Course updated successfully!");
+        return "Course updated successfully!";
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteCourse(@PathVariable int id) {
+    public String deleteCourse(@PathVariable int id) {
         courseService.deleteCourse(id);
-        return ResponseEntity.ok("Course deleted successfully!");
+        return "Course deleted successfully!";
     }
 
     @GetMapping("/search")

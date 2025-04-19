@@ -19,9 +19,10 @@ public class BatchService {
 		  batchRepo.save(batch);
 	    }
 
-	    public List<Map<String, Object>> getAllBatches() {
-	        return batchRepo.getAllBatches();
-	    }
+	  public List<Batch> getAllBatches() {
+		    return batchRepo.getAllBatches();
+		}
+
 
 	    public List<Batch> searchBatch(String keyword) {
 	        return batchRepo.searchBatch(keyword);
