@@ -21,22 +21,48 @@ public class RegisterRepoImpl {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+//    public boolean emailExists(String email) {
+//        String sql = "SELECT COUNT(*) FROM students WHERE email = ?";
+//        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
+//        return count != null && count > 0;
+//    }
     public boolean emailExists(String email) {
-        String sql = "SELECT COUNT(*) FROM students WHERE email = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
-        return count != null && count > 0;
+        String sql = "select count(*) AS count from students where email = ?";
+
+        List<Integer> results = jdbcTemplate.query(sql, new RowMapper<Integer>() {
+            @Override
+            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getInt("count");
+            }
+        }, email);
+
+        return !results.isEmpty() && results.get(0) > 0;
     }
+
 
     public boolean saveStudent(Register student) {
-        String sql = "INSERT INTO students (name, email, contact, address, course, birthdate, gender, username, password,batch) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
-        int rowsAffected = jdbcTemplate.update(sql,
-                student.getName(), student.getEmail(), student.getContact(),
-                student.getAddress(), student.getCourse(), student.getBirthdate(),
-                student.getGender(), student.getUsername(), student.getPassword(),student.getBatch());
+        String sql = "insert into students (name, email, contact, address, course, birthdate, gender, username, password, batch) " +
+                     "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        return rowsAffected > 0; 
+        int rows = jdbcTemplate.update(sql, new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1, student.getName());
+                ps.setString(2, student.getEmail());
+                ps.setString(3, student.getContact());
+                ps.setString(4, student.getAddress());
+                ps.setString(5, student.getCourse());
+                ps.setString(6, student.getBirthdate()); 
+                ps.setString(7, student.getGender());
+                ps.setString(8, student.getUsername());
+                ps.setString(9, student.getPassword());
+                ps.setString(10, student.getBatch());
+            }
+        });
+
+        return rows > 0;
     }
+
 
     public boolean validateLogin(String email, String username, String password) {
         String sql = "SELECT * FROM students WHERE email = ? AND username = ? AND password = ?";

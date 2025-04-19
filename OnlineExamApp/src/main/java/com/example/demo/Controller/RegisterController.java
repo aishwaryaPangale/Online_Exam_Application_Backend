@@ -24,20 +24,20 @@ public class RegisterController {
     private RegisterRepoImpl registerRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody Register student) {
-        if (registerRepository.emailExists(student.getEmail())) {
-            return ResponseEntity.ok("Email already exists");
-        }
-
-        boolean saved = registerRepository.saveStudent(student);
-        if (saved) {
-            return ResponseEntity.ok("Registered successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving student");
-        }
+    public String register(@RequestBody Register student) {
+        return regService.register(student);
     }
     
-    
+    @PostMapping("/login")
+    public String login(@RequestParam String email, @RequestParam String username,  @RequestParam String password) {
+        boolean isValidLogin = regService.login(email, username, password);
+
+        if (isValidLogin) {
+            return "Login successful!";
+        } else {
+            return "Invalid credentials!";
+        }
+    }
     //curd operation
     @GetMapping("/register/all")
     public List<Register> getAllStudents() {
