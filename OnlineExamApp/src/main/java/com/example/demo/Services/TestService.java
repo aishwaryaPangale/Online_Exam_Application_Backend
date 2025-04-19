@@ -1,12 +1,14 @@
 package com.example.demo.Services;
 
-import com.example.demo.Model.Test;
-import com.example.demo.Repository.TestRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import com.example.demo.Model.Test;
+import com.example.demo.Repository.TestRepository;
 
 @Service
 public class TestService {
@@ -18,7 +20,7 @@ public class TestService {
         testRepository.addTest(test);
     }
 
-    public List<Map<String, Object>> getAllTestsWithJoin() {
+    public List<Test> getAllTestsWithJoin() {
         return testRepository.getAllTestsWithJoin();
     }
 
@@ -29,11 +31,15 @@ public class TestService {
 //        return testRepository.getEnabledTests();
 //    }
 
-    public List<Map<String, Object>> searchTests(String keyword) {
+    public List<Test> searchTests(String keyword) {
        return testRepository.searchTests(keyword);
     }
     
     public void setPaperSet(int testId) {
         testRepository.paperAsSet(testId);
+    }
+    
+    public List<Test> getAvailableTestsByUsername(String username) {
+        return testRepository.findAvailableTestsByUsername(username);
     }
 }
