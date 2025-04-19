@@ -119,22 +119,28 @@ public class TestRepository {
     
     //Available Test
     public List<Test> findAvailableTestsByUsername(String username) {
-        String sql = "select t.id, t.date, t.batch_name, t.course_name, t.time, t.mode, t.disable, t.action, t.ispaperSet " +
-                     "from test t join students s ON t.batch_id = s.batch where s.username = ? AND t.ispaperSet = true";
+    	String sql = """
+    		    SELECT t.id, t.date, b.batch_name, c.course_name, t.time
+    		    FROM test t
+    		    JOIN students s ON t.batch_id = s.batch
+    		    JOIN batch b ON b.id = t.batch_id
+    		    JOIN course c ON c.id = t.course_id
+    		    WHERE s.username = ? AND t.ispaperSet = true
+    		""";
+	
+     
 
-        return jdbcTemplate.query(sql, ps -> ps.setString(1, username), (rs, rowNum) -> {
-            Test test = new Test();
-            test.setId(rs.getInt("id"));
-            test.setDate(rs.getString("date"));
-            test.setBatchId(rs.getInt("batch_name"));
-            test.setCourseId(rs.getInt("course_name"));
-            test.setTime(rs.getString("time"));
-            test.setMode(rs.getString("mode"));
-            test.setDisable(rs.getBoolean("disable"));
-            test.setAction(rs.getBoolean("action"));
-            test.setIspaperSet(rs.getBoolean("ispaperSet"));
-            return test;
-        });
+    	 return jdbcTemplate.query(sql, new Object[]{username}, new RowMapper<Test>() {
+    	        @Override
+    	        public Test mapRow(ResultSet rs, int rowNum) throws SQLException {
+    	            Test test = new Test();
+    	            test.setId(rs.getInt("id"));
+    	            test.setDate(rs.getString("date"));
+    	            test.setBatchName(rs.getString("batch_name"));
+    	            test.setCourseName(rs.getString("course_name"));
+    	            test.setTime(rs.getString("time"));
+    	            return test;
+    	        }
+    	    });
     }
-
 }
