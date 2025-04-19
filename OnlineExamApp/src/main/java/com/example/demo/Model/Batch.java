@@ -7,6 +7,7 @@ public class Batch {
     private int id;
     private String batchName;
     private int courseId;
+    private String courseName;
 
 }
 

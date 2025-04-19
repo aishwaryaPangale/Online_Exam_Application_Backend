@@ -25,13 +25,13 @@ public class BatchController {
     private BatchService batchService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addBatch(@RequestBody Batch batch) {
+    public String addBatch(@RequestBody Batch batch) {
         batchService.addBatch(batch);
-        return ResponseEntity.ok("Batch added successfully");
+        return "Batch added successfully";
     }
 
     @GetMapping("/all")
-    public List<Map<String, Object>> getAllBatches() {
+    public List<Batch> getAllBatches() {
         return batchService.getAllBatches();
     }
 

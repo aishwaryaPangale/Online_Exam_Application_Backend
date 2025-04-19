@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.Model.Register;
 import com.example.demo.Repository.RegisterRepoImpl;
@@ -40,46 +41,45 @@ public class RegisterController {
     //curd operation
     @GetMapping("/register")
     public List<Register> getAllStudents() {
-        return registerRepository.getAllStudents();
+        return regService.getAllStudents();
     }
 
     
 
     @GetMapping("register/{id}")
     public Register getStudentById(@PathVariable int id) {
-        return registerRepository.getStudentById(id);
+        return regService.getStudentById(id);
     }
 
     @PutMapping("register/{id}")
-    public ResponseEntity<String> updateStudent(@PathVariable int id, @RequestBody Register student) {
+    public String updateStudent(@PathVariable int id, @RequestBody Register student) {
         student.setId(id);
-        registerRepository.updateStudent(student);
-        return ResponseEntity.ok("Student updated successfully");
+        regService.updateStudent(student);
+        return "Student updated successfully";
     }
 
     @DeleteMapping("register/{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable int id) {
+    public String deleteStudent(@PathVariable int id) {
     	registerRepository.deleteStudent(id);
-        return ResponseEntity.ok("Student deleted successfully");
+        return "Student deleted successfully";
     }
     @GetMapping("/register/username/{username}")
-    public ResponseEntity<Register> getStudentByUsername(@PathVariable String username) {
-    	Register user = regService.getStudentByUsername(username); // or studentService
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
+    public Register getStudentByUsername(@PathVariable String username) {
+        Register user = regService.getStudentByUsername(username);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found");
         }
+        return user;
     }
     
     //update student by name
     @PutMapping("/register/update/{username}")
-    public ResponseEntity<String> updateStudent(@PathVariable String username, @RequestBody Register updatedStudent) {
+    public String updateStudent(@PathVariable String username, @RequestBody Register updatedStudent) {
         boolean success = regService.updateStudent(username, updatedStudent);
         if (success) {
-            return ResponseEntity.ok("Updated successfully");
+            return "Updated successfully";
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Update failed");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "update failed");
         }
     }
 
