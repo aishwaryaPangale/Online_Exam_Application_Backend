@@ -28,17 +28,15 @@ public class TestController {
     private TestService testService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addTest(@RequestBody Test test) {
+    public String addTest(@RequestBody Test test) {
         testService.addTest(test);
-        return ResponseEntity.ok("Test added successfully");
+        return "Test added successfully";
     }
 
     @GetMapping("/all")
-    public List<Map<String, Object>> getAllTests() {
+    public List<Test> getAllTests() {
     	
-    	List <Map<String, Object>> list=testService.getAllTestsWithJoin();
-    	
-    	System.out.println(list);
+    	List<Test> list=testService.getAllTestsWithJoin();
         return list;
     }
 
@@ -53,14 +51,21 @@ public class TestController {
     }
 
     @GetMapping("/search")
-    public List<Map<String, Object>> searchTests(@RequestParam String keyword) {
+    public List<Test> searchTests(@RequestParam String keyword) {
         return testService.searchTests(keyword);
     }
 
     @PutMapping("/set-paper/{id}")
-    public ResponseEntity<Void> paperAsSet(@PathVariable int id) {
+    public String paperAsSet(@PathVariable int id) {
         testService.setPaperSet(id);
-        return ResponseEntity.ok().build();
+        return "Paper set successfully.";
     }
+
+    @GetMapping("/available")
+    public List<Test> getAvailableTestsByUsername(@RequestParam String username) {
+        return testService.getAvailableTestsByUsername(username);
+    }
+
+
 }
 	

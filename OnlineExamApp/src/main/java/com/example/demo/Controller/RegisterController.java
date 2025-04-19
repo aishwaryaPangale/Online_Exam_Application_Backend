@@ -39,7 +39,7 @@ public class RegisterController {
     
     
     //curd operation
-    @GetMapping("/register")
+    @GetMapping("/register/all")
     public List<Register> getAllStudents() {
         return regService.getAllStudents();
     }
