@@ -23,9 +23,22 @@ public class RegisterController {
     @Autowired
     private RegisterRepoImpl registerRepository;
 
+//    @PostMapping("/register")
+//    public String register(@RequestBody Register student) {
+//        return regService.register(student);
+//    }
     @PostMapping("/register")
     public String register(@RequestBody Register student) {
-        return regService.register(student);
+        if (registerRepository.emailExists(student.getEmail())) {
+            return "Email already exists";
+        }
+
+        boolean saved = registerRepository.saveStudent(student);
+        if (saved) {
+            return "Registered successfully";
+        } else {
+            return "Error saving student";
+        }
     }
     
     @PostMapping("/login")
