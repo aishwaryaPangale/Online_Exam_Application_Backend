@@ -32,4 +32,9 @@ public class CourseService {
     public List<Course> searchByName(String name) {
         return courseRepository.searchByName(name);
     }
+    
+    public int getCourseCount() {
+        return courseRepository.fetchCourseCount();
+    }
+
 }

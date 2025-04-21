@@ -51,5 +51,9 @@ public class RegisterServiceImpl {
     public boolean updateStudent(String username, Register updatedStudent) {
         return regRepo.updateStudentByUsername(username, updatedStudent);
     }
+    
+    public int getStudentCount() {
+        return regRepo.fetchStudentCount();
+    }
 
 }
