@@ -104,6 +104,19 @@ public class CourseRepository {
             }
         });
     }
+    
+    public int fetchCourseCount() {
+        String sql = "SELECT COUNT(*) FROM course";
+        List<Integer> result = jdbcTemplate.query(sql, new RowMapper<Integer>() {
+            @Override
+            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getInt(1); // return the count
+            }
+        });
+
+        return result.isEmpty() ? 0 : result.get(0); // safety fallback
+    }
+
 
 }
 

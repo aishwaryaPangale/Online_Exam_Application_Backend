@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -45,5 +46,11 @@ public class CourseController {
     @GetMapping("/search")
     public List<Course> searchCourse(@RequestParam String name) {
         return courseService.searchByName(name);
+    }
+    
+    @GetMapping("/count")
+    public Map<String, Integer> getCourseCount() {
+        int count = courseService.getCourseCount();
+        return Map.of("count", count);
     }
 }

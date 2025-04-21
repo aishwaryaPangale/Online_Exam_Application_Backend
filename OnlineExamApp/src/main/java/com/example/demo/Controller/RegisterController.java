@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,7 @@ import com.example.demo.Services.RegisterServiceImpl;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:5173") // allow frontend port
+@CrossOrigin(origins = "http://localhost:5173") 
 public class RegisterController {
 
     @Autowired
@@ -95,5 +96,13 @@ public class RegisterController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "update failed");
         }
     }
+    
+    //count student
+    @GetMapping("/students/count")
+    public Map<String, Integer> getStudentCount() {
+        int count = regService.getStudentCount();
+        return Map.of("count", count);
+    }
+
 
 }

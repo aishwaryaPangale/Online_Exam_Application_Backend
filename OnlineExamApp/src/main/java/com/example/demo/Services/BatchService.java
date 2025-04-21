@@ -27,4 +27,9 @@ public class BatchService {
 	    public List<Batch> searchBatch(String keyword) {
 	        return batchRepo.searchBatch(keyword);
 	    }
+	    
+	    public int getBatchCount() {
+	        return batchRepo.fetchBatchCount();
+	    }
+
 }

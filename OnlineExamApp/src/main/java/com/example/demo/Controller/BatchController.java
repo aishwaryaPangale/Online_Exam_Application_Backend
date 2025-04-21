@@ -40,4 +40,10 @@ public class BatchController {
     public List<Batch> searchBatch(@RequestParam String keyword) {
         return batchService.searchBatch(keyword);
     }
+    
+    @GetMapping("/count")
+    public Map<String, Integer> getBatchCount() {
+        int count = batchService.getBatchCount();
+        return Map.of("count", count);
+    }
 }

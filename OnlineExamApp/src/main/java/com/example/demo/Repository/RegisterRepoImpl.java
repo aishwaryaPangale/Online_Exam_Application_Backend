@@ -217,6 +217,19 @@ public class RegisterRepoImpl {
             }
         }) > 0; 
     }
+    
+    
+    public int fetchStudentCount() {
+        String sql = "SELECT COUNT(*) FROM students";
+        List<Integer> result = jdbcTemplate.query(sql, new RowMapper<Integer>() {
+            @Override
+            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getInt(1); // Return the count from the first column
+            }
+        });
+
+        return result.isEmpty() ? 0 : result.get(0); // If result is empty, return 0
+    }
 
     
    

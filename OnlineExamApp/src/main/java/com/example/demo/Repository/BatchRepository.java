@@ -79,6 +79,19 @@ public class BatchRepository {
 
 		    return list;
 		}
+	 
+	 public int fetchBatchCount() {
+		    String sql = "SELECT COUNT(*) FROM batch";
+		    List<Integer> result = jdbcTemplate.query(sql, new RowMapper<Integer>() {
+		        @Override
+		        public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+		            return rs.getInt(1); // return the count
+		        }
+		    });
+
+		    return result.isEmpty() ? 0 : result.get(0); // if empty, return 0
+		}
+
 
 
 }
