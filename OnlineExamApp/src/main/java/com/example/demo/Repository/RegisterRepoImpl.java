@@ -232,6 +232,24 @@ public class RegisterRepoImpl {
     }
 
     
+    //test 
+//    public List<Register> getStudentTests(int studentId) {
+//        String sql = "SELECT t.name AS test_name, t.date AS test_date, st.attended, st.score " +
+//                     "FROM student_test st " +
+//                     "JOIN test t ON st.test_id = t.id " +
+//                     "WHERE st.student_id = ? " +
+//                     "ORDER BY t.date";
+//
+//        return jdbcTemplate.query(sql, new Object[]{studentId}, (rs, rowNum) -> {
+//            Register reg = new Register();
+//            reg.setTestName(rs.getString("test_name"));
+//            reg.setDate(rs.getString("test_date")); // automatically formatted as string
+//            reg.setAttended(rs.getBoolean("attended"));
+//            reg.setScore(rs.wasNull() ? null : rs.getInt("score"));
+//            return reg;
+//        });
+//    }
+
    
 
 }

@@ -55,5 +55,9 @@ public class RegisterServiceImpl {
     public int getStudentCount() {
         return regRepo.fetchStudentCount();
     }
+    
+//    public List<Register> getStudentTests(int studentId) {
+//        return regRepo.getStudentTests(studentId);
+//    }
 
 }
