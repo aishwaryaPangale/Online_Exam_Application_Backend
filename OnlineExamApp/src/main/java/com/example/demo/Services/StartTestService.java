@@ -14,30 +14,25 @@ public class StartTestService {
 
 	@Autowired
 	StartTestRepositroy startRepo;
-	private Map<String, Object> toLowerCaseKeys(Map<String, Object> input) {
-	    Map<String, Object> result = new HashMap<>();
-	    for (Map.Entry<String, Object> entry : input.entrySet()) {
-	        result.put(entry.getKey().toLowerCase(), entry.getValue());
+	 private Map<String, Object> toLowerCaseKeys(Map<String, Object> input) {
+	        Map<String, Object> result = new HashMap<>();
+	        for (Map.Entry<String, Object> entry : input.entrySet()) {
+	            result.put(entry.getKey().toLowerCase(), entry.getValue());
+	        }
+	        return result;
 	    }
-	    return result;
-	}
 
-	public Map<String, Object> getTestDetailsWithQuestions(int testId) {
-	    Map<String, Object> result = new HashMap<>();
+	    public Map<String, Object> getTestDetailsWithQuestions(int testId) {
+	        Map<String, Object> result = new HashMap<>();
 
-	    Map<String, Object> testDetails = startRepo.getTestDetails(testId);
-	    List<Map<String, Object>> questions = startRepo.getQuestionsByTestId(testId);
+	        Map<String, Object> testDetails = startRepo.getTestDetails(testId);
+	        List<Map<String, Object>> questions = startRepo.getQuestionsByTestId(testId);
 
-	    result.put("test", toLowerCaseKeys(testDetails));
+	        result.put("test", toLowerCaseKeys(testDetails));
+	        result.put("questions", questions.stream().map(this::toLowerCaseKeys).toList());
 
-	    // For questions, lowercase keys too (optional, recommended)
-	    List<Map<String, Object>> lowerQuestions = questions.stream()
-	        .map(this::toLowerCaseKeys)
-	        .toList();
-	    result.put("questions", lowerQuestions);
-
-	    return result;
-	}
+	        return result;
+	    }
 
 	
 	

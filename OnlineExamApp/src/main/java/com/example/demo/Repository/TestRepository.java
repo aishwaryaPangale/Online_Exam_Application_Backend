@@ -61,19 +61,51 @@ public class TestRepository {
             }
         });
     }
+//Action Logic
+    public List<Test> getAllTestsWithAction(String studentUsername) {
+        String sql = """
+            SELECT t.id, t.date, t.time, t.mode, t.disable, t.ispaperSet,
+                   b.batch_name, c.course_name,
+                   NOT EXISTS (
+                       SELECT 1 FROM test_result r 
+                       WHERE r.test_id = t.id AND r.student_username = ?
+                   ) AS action
+            FROM test t
+            JOIN batch b ON t.batch_id = b.id
+            JOIN course c ON t.course_id = c.id
+        """;
 
-
-    // Disable a test by ID
-    public boolean disableTest(int id) {
-        String sql = "UPDATE test SET disable = true WHERE id = ?";
-        int rows = jdbcTemplate.update(sql, new PreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setInt(1, id);
-            }
+        return jdbcTemplate.query(sql, new Object[]{studentUsername}, (rs, rowNum) -> {
+            Test test = new Test();
+            test.setId(rs.getInt("id"));
+            test.setDate(rs.getString("date"));
+            test.setTime(rs.getString("time"));
+            test.setMode(rs.getString("mode"));
+            test.setDisable(rs.getBoolean("disable"));
+            test.setIspaperSet(rs.getBoolean("ispaperSet"));
+            test.setBatchName(rs.getString("batch_name"));
+            test.setCourseName(rs.getString("course_name"));
+            test.setAction(rs.getBoolean("action"));
+            return test;
         });
-        return rows > 0;
     }
+
+
+    public void disableTest(int id) {
+        String sql = "UPDATE test SET disable = true WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+    // Disable a test by ID
+//    public boolean disableTest(int id) {
+//        String sql = "UPDATE test SET disable = true WHERE id = ?";
+//        int rows = jdbcTemplate.update(sql, new PreparedStatementSetter() {
+//            @Override
+//            public void setValues(PreparedStatement ps) throws SQLException {
+//                ps.setInt(1, id);
+//            }
+//        });
+//        return rows > 0;
+//    }
 
 
     // Search tests by keyword (batch or course name)
@@ -120,12 +152,12 @@ public class TestRepository {
     //Available Test
     public List<Test> findAvailableTestsByUsername(String username) {
     	String sql = """
-    		    SELECT t.id, t.date, b.batch_name, c.course_name, t.time
-    		    FROM test t
-    		    JOIN students s ON t.batch_id = s.batch
-    		    JOIN batch b ON b.id = t.batch_id
-    		    JOIN course c ON c.id = t.course_id
-    		    WHERE s.username = ? AND t.ispaperSet = true
+    		   SELECT t.id, t.date, b.batch_name, c.course_name, t.time
+    FROM test t
+    JOIN batch b ON b.id = t.batch_id
+    JOIN students s ON s.batch = b.batch_name
+    JOIN course c ON c.id = t.course_id
+    WHERE s.username = ? AND t.ispaperSet = 1
     		""";
 	
      
@@ -139,7 +171,9 @@ public class TestRepository {
     	            test.setBatchName(rs.getString("batch_name"));
     	            test.setCourseName(rs.getString("course_name"));
     	            test.setTime(rs.getString("time"));
+    	            System.out.println(test);
     	            return test;
+    	           
     	        }
     	    });
     }
