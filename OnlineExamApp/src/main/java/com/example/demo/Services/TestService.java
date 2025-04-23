@@ -23,10 +23,17 @@ public class TestService {
     public List<Test> getAllTestsWithJoin() {
         return testRepository.getAllTestsWithJoin();
     }
-
-    public boolean disableTest(int id) {
-       return testRepository.disableTest(id);
+    public List<Test> getAllTestsWithStudentAction(String studentUsername) {
+        return testRepository.getAllTestsWithAction(studentUsername);
     }
+
+    public void disableTest(int id) {
+        testRepository.disableTest(id);
+    }
+
+//    public boolean disableTest(int id) {
+//       return testRepository.disableTest(id);
+//    }
 //    public List<Test> getEnabledTests() {
 //        return testRepository.getEnabledTests();
 //    }
@@ -41,5 +48,6 @@ public class TestService {
     
     public List<Test> getAvailableTestsByUsername(String username) {
         return testRepository.findAvailableTestsByUsername(username);
+       
     }
 }
