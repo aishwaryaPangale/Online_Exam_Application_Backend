@@ -103,6 +103,12 @@ public class RegisterController {
         int count = regService.getStudentCount();
         return Map.of("count", count);
     }
+    
+    //test Score
+//    @GetMapping("/students/{studentId}/tests")
+//    public List<Register> getStudentTests(@PathVariable int studentId) {
+//        return regService.getStudentTests(studentId);
+//    }
 
 
 }

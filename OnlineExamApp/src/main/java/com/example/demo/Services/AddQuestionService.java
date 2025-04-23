@@ -30,7 +30,7 @@ public class AddQuestionService {
 	                isFirstLine = false; 
 	                continue;
 	            }
-
+	            System.out.println("CSV Line: " + line); 
 	            String[] data = line.split(",");
 
 	            if (data.length == 6) {
