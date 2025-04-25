@@ -62,34 +62,45 @@ public class TestRepository {
         });
     }
 //Action Logic
-    public List<Test> getAllTestsWithAction(String studentUsername) {
-        String sql = """
-            SELECT t.id, t.date, t.time, t.mode, t.disable, t.ispaperSet,
-                   b.batch_name, c.course_name,
-                   NOT EXISTS (
-                       SELECT 1 FROM test_result r 
-                       WHERE r.test_id = t.id AND r.student_username = ?
-                   ) AS action
-            FROM test t
-            JOIN batch b ON t.batch_id = b.id
-            JOIN course c ON t.course_id = c.id
-        """;
 
-        return jdbcTemplate.query(sql, new Object[]{studentUsername}, (rs, rowNum) -> {
-            Test test = new Test();
-            test.setId(rs.getInt("id"));
-            test.setDate(rs.getString("date"));
-            test.setTime(rs.getString("time"));
-            test.setMode(rs.getString("mode"));
-            test.setDisable(rs.getBoolean("disable"));
-            test.setIspaperSet(rs.getBoolean("ispaperSet"));
-            test.setBatchName(rs.getString("batch_name"));
-            test.setCourseName(rs.getString("course_name"));
-            test.setAction(rs.getBoolean("action"));
-            return test;
-        });
+    
+//    public void updateTestActionFlag(int id) {
+//        String sql = "UPDATE test SET action = false WHERE id = ?";
+//        jdbcTemplate.update(sql, id);
+//    }
+//
+//    public List<Test> findTestsByTestId(int id) {
+//        String sql = "SELECT * FROM test WHERE id = ?";
+//        return jdbcTemplate.query(sql, new Object[]{id}, new TestRowMapper());
+//    }
+//    public class TestRowMapper implements RowMapper<Test> {
+//        @Override
+//        public Test mapRow(ResultSet rs, int rowNum) throws SQLException {
+//            Test test = new Test();
+//            test.setId(rs.getInt("id"));
+//            test.setBatchName(rs.getString("batchName"));
+//            test.setCourseName(rs.getString("courseName"));
+//            test.setDate(rs.getString("date")); // If using java.sql.Date, use rs.getDate
+//            test.setTime(rs.getString("time")); // If using java.sql.Time, use rs.getTime
+//            test.setMode(rs.getString("mode"));
+//            test.setAction(rs.getBoolean("action")); // If you have an 'action' column
+//            return test;
+//        }
+//    }
+
+//    public void setTestActionToFalse(int id) {
+//        String sql = "UPDATE test SET action = 0 WHERE id = ?";
+//    	String sql = "UPDATE test SET action = 0 WHERE id = ? AND action != 0";
+//
+//       int rows= jdbcTemplate.update(sql, id);
+//        System.out.println("Rows updated: " + rows); // <--- Debug log
+//
+//    }
+    
+    public int updateActionIfResultExists(int testId) {
+        String sql = "UPDATE test SET action = false WHERE test_id = ? AND test_id IN (SELECT test_id FROM test_result)";
+        return jdbcTemplate.update(sql, testId);
     }
-
 
     public void disableTest(int id) {
         String sql = "UPDATE test SET disable = true WHERE id = ?";

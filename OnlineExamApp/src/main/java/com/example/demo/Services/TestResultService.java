@@ -58,4 +58,19 @@ public class TestResultService {
         return result;
     }
 
+//    StudentWiseReport
+    public TestResultService(TestResultRepository testResultRepository) {
+        this.repository = testResultRepository;
+    }
+
+    public List<TestResult> getTestResultsByStudent(String studentUsername) {
+        return repository.getStudentTestResults(studentUsername);
+    }
+
+    public List<TestResult> getAllTestResults() {
+        return repository.getAllTestResults();
+    }
+    
+    
+    
 }

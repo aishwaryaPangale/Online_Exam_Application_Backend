@@ -60,6 +60,59 @@ public class TestResultRepository {
         return jdbcTemplate.queryForList(sql, username);
     }
 
+//    StudentWiseReport
+    public TestResultRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public List<TestResult> getStudentTestResults(String studentUsername) {
+        String sql = "SELECT * FROM test_result WHERE student_username = ?";
+        return jdbcTemplate.query(sql, new Object[]{studentUsername}, (rs, rowNum) -> {
+            TestResult result = new TestResult();
+            result.setStudentName(rs.getString("student_username"));
+            result.setTestId(rs.getInt("test_id"));
+            result.setTotalQuestions(rs.getInt("total_questions"));
+            result.setAttemptedQuestions(rs.getInt("attempted_questions"));
+            result.setCorrectAnswers(rs.getInt("correct_answers"));
+            result.setWrongAnswers(rs.getInt("wrong_answer"));
+            result.setTotalMarks(rs.getInt("total_marks"));
+            return result;
+        });
+    }
+
+    public List<TestResult> getAllTestResults() {
+        String sql = "SELECT * FROM test_result";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            TestResult result = new TestResult();
+            result.setStudentName(rs.getString("student_username"));
+            result.setTestId(rs.getInt("test_id"));
+            result.setTotalQuestions(rs.getInt("total_questions"));
+            result.setAttemptedQuestions(rs.getInt("attempted_questions"));
+            result.setCorrectAnswers(rs.getInt("correct_answers"));
+            result.setWrongAnswers(rs.getInt("wrong_answer"));
+            result.setTotalMarks(rs.getInt("total_marks"));
+            return result;
+        });
+    }
+    
+    
+//    Action
+    
+    public boolean doesTestHaveResult(int testId) {
+        String sql = "SELECT COUNT(*) FROM test_result WHERE test_id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, testId);
+        return count != null && count > 0;
+    }
+    
+        
+   
+    
+    
+    
+    
 
 }
+  
+
+
 
