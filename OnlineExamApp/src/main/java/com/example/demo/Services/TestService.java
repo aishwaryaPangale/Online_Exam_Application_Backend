@@ -28,18 +28,16 @@ public class TestService {
         return testRepository.getAllTestsWithJoin();
     }
 //Action
-//    public boolean updateActionIfResultExists(int id) {
-//        boolean hasResult = testResultRepository.doesTestHaveResult(id);
-//        if (hasResult) {
-//            testRepository.setTestActionToFalse(id);
-//            return true;
-//        }
-//        return false;
-//    }
     
-    public boolean updateActionIfResultExists(int id) {
-        int rowsUpdated = testRepository.updateActionIfResultExists(id);
+    public boolean markTestAsSubmitted(int id) {
+        System.out.println("Marking test " + id + " as submitted."); // Add this log
+        int rowsUpdated = testRepository.updateActionAfterSubmission(id);
+        System.out.println("Number of rows updated: " + rowsUpdated + " for test ID: " + id); // Add this log
         return rowsUpdated > 0;
+    }
+    
+    public Test getTestById(int id) {
+        return testRepository.findById(id); // Implement this
     }
 
 //disable
