@@ -43,13 +43,13 @@ public class TestController {
 //action 
     @PostMapping("/submit")
     public ResponseEntity<Test> disableAndSubmit(@RequestParam int id) {
-        // Disable the test
+   
         testService.disableTest(id);
 
-        // Submit the test (set action = 0)
+       
         testService.markTestAsSubmitted(id);
 
-        // Fetch the updated test and return it
+      
         Test updatedTest = testService.getTestById(id);
         return ResponseEntity.ok(updatedTest);
     }

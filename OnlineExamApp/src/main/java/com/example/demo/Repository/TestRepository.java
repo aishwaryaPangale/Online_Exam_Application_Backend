@@ -99,7 +99,7 @@ public class TestRepository {
 //    }
     
     public int updateActionAfterSubmission(int id) {
-        String sql = "UPDATE test SET action = 0 WHERE id = ?";
+        String sql = "UPDATE test SET action = false WHERE id = ?";
         System.out.println("Executing SQL: " + sql + " with ID: " + id); // Add this log
         return jdbcTemplate.update(sql, id);
     }
