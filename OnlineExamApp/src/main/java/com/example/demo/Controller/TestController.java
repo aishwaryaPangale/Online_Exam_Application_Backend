@@ -40,11 +40,17 @@ public class TestController {
         return list;
     }
 
-    @GetMapping("/action/all")
-    public ResponseEntity<List<Test>> getAllTests(@RequestParam String username) {
-        List<Test> tests = testService.getAllTestsWithStudentAction(username);
-        return new ResponseEntity<>(tests, HttpStatus.OK);
+    @PutMapping("/update-action")
+    public ResponseEntity<String> updateTestActionIfResultExists(@RequestParam int id) {
+        System.out.println("Received ID: " + id); // <--- Debug log
+        boolean updated = testService.updateActionIfResultExists(id);
+        if (updated) {
+            return ResponseEntity.ok("Action set to false — test was attended.");
+        } else {
+            return ResponseEntity.ok("No test result found — action not updated.");
+        }
     }
+
 
     @PutMapping("/disable/{id}")
     public ResponseEntity<String> disableTest(@PathVariable int id) {

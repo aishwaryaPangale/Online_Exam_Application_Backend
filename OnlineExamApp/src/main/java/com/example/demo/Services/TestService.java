@@ -9,12 +9,16 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.Model.Test;
 import com.example.demo.Repository.TestRepository;
+import com.example.demo.Repository.TestResultRepository;
 
 @Service
 public class TestService {
 
     @Autowired
     private TestRepository testRepository;
+    
+    @Autowired 
+    private TestResultRepository testResultRepository;
 
     public void addTest(Test test) {
         testRepository.addTest(test);
@@ -23,10 +27,22 @@ public class TestService {
     public List<Test> getAllTestsWithJoin() {
         return testRepository.getAllTestsWithJoin();
     }
-    public List<Test> getAllTestsWithStudentAction(String studentUsername) {
-        return testRepository.getAllTestsWithAction(studentUsername);
+//Action
+//    public boolean updateActionIfResultExists(int id) {
+//        boolean hasResult = testResultRepository.doesTestHaveResult(id);
+//        if (hasResult) {
+//            testRepository.setTestActionToFalse(id);
+//            return true;
+//        }
+//        return false;
+//    }
+    
+    public boolean updateActionIfResultExists(int id) {
+        int rowsUpdated = testRepository.updateActionIfResultExists(id);
+        return rowsUpdated > 0;
     }
 
+//disable
     public void disableTest(int id) {
         testRepository.disableTest(id);
     }

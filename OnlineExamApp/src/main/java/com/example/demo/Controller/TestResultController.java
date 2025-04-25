@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,5 +57,22 @@ public class TestResultController {
     public ResponseEntity<Map<String, Object>> getStudentTestSummary(@RequestParam String username) {
         return new ResponseEntity<>(testResultService.getSummaryByUsername(username), HttpStatus.OK);
     }
+    
 
+//    StudentWiseReport
+    public TestResultController(TestResultService testResultService) {
+        this.testResultService = testResultService;
+    }
+
+   
+    @GetMapping("/report/{username}")
+    public List<TestResult> getStudentTestResults(@PathVariable String username) {
+        return testResultService.getTestResultsByStudent(username);
+    }
+
+ 
+    @GetMapping("/all")
+    public List<TestResult> getAllTestResults() {
+        return testResultService.getAllTestResults();
+    }
 }
