@@ -20,8 +20,7 @@ public class StartTestController {
 	@Autowired
 	private StartTestService startService;
 	@GetMapping("/startTest")
-    public ResponseEntity<Map<String, Object>> startTest(@RequestParam int testId) {
-        Map<String, Object> response = startService.getTestDetailsWithQuestions(testId);
-        return ResponseEntity.ok(response);
+    public Map<String, Object> startTest(@RequestParam int testId) {
+        return startService.getTestDetailsWithQuestions(testId);
     }
 }
