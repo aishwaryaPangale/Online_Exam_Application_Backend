@@ -14,7 +14,7 @@ import com.example.demo.Services.StartTestService;
 
 @RestController
 @RequestMapping("/api/student")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin("http://localhost:5173")
 public class StartTestController {
 
 	@Autowired
