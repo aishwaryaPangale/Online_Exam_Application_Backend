@@ -3,6 +3,7 @@ package com.example.demo.Repository;
 import com.example.demo.Model.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
@@ -97,9 +98,15 @@ public class TestRepository {
 //
 //    }
     
-    public int updateActionIfResultExists(int testId) {
-        String sql = "UPDATE test SET action = false WHERE test_id = ? AND test_id IN (SELECT test_id FROM test_result)";
-        return jdbcTemplate.update(sql, testId);
+    public int updateActionAfterSubmission(int id) {
+        String sql = "UPDATE test SET action = 0 WHERE id = ?";
+        System.out.println("Executing SQL: " + sql + " with ID: " + id); // Add this log
+        return jdbcTemplate.update(sql, id);
+    }
+    
+    public Test findById(int id) {
+        String sql = "SELECT * FROM test WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Test.class), id);
     }
 
     public void disableTest(int id) {

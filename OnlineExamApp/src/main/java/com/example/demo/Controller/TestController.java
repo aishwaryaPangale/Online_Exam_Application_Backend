@@ -40,15 +40,18 @@ public class TestController {
         return list;
     }
 
-    @PutMapping("/update-action")
-    public ResponseEntity<String> updateTestActionIfResultExists(@RequestParam int id) {
-        System.out.println("Received ID: " + id); // <--- Debug log
-        boolean updated = testService.updateActionIfResultExists(id);
-        if (updated) {
-            return ResponseEntity.ok("Action set to false — test was attended.");
-        } else {
-            return ResponseEntity.ok("No test result found — action not updated.");
-        }
+//action 
+    @PostMapping("/submit")
+    public ResponseEntity<Test> disableAndSubmit(@RequestParam int id) {
+        // Disable the test
+        testService.disableTest(id);
+
+        // Submit the test (set action = 0)
+        testService.markTestAsSubmitted(id);
+
+        // Fetch the updated test and return it
+        Test updatedTest = testService.getTestById(id);
+        return ResponseEntity.ok(updatedTest);
     }
 
 
