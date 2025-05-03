@@ -103,13 +103,7 @@ public class TestResultRepository {
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, testId);
         return count != null && count > 0;
     }
-    
-        
-   
-    
-    
-    
-    
+     
 
 }
   

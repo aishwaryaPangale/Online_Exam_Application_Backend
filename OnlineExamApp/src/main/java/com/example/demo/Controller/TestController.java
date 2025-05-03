@@ -54,33 +54,27 @@ public class TestController {
         return ResponseEntity.ok(updatedTest);
     }
 
+//    disabled
 
     @PutMapping("/disable/{id}")
     public ResponseEntity<String> disableTest(@PathVariable int id) {
         testService.disableTest(id);
         return ResponseEntity.ok("Test disabled successfully");
     }
-//    @PutMapping("/disable/{id}")
-//    public ResponseEntity<String> disableTest(@PathVariable int id) {
-//        boolean isDisabled = testService.disableTest(id);
-//        if (isDisabled) {
-//            return ResponseEntity.ok("Test disabled successfully");
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to disable test");
-//        }
-//    }
 
+//search test
     @GetMapping("/search")
     public List<Test> searchTests(@RequestParam String keyword) {
         return testService.searchTests(keyword);
     }
 
+//    set paper
     @PutMapping("/set-paper/{id}")
     public String paperAsSet(@PathVariable int id) {
         testService.setPaperSet(id);
         return "Paper set successfully.";
     }
-
+//test available or not
     @GetMapping("/available")
     public List<Test> getAvailableTestsByUsername(@RequestParam String username) {
     	System.out.println(username);

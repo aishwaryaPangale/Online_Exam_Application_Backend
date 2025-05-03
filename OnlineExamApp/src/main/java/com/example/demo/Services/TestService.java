@@ -51,15 +51,19 @@ public class TestService {
 //    public List<Test> getEnabledTests() {
 //        return testRepository.getEnabledTests();
 //    }
+    
+//    search test
 
     public List<Test> searchTests(String keyword) {
        return testRepository.searchTests(keyword);
     }
+//    set paper
     
     public void setPaperSet(int testId) {
         testRepository.paperAsSet(testId);
     }
     
+//    test available or not
     public List<Test> getAvailableTestsByUsername(String username) {
         return testRepository.findAvailableTestsByUsername(username);
        
