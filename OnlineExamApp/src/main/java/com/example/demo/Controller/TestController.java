@@ -41,18 +41,28 @@ public class TestController {
     }
 
 //action 
-    @PostMapping("/submit")
-    public ResponseEntity<Test> disableAndSubmit(@RequestParam int id) {
-   
-        testService.disableTest(id);
-
-       
-        testService.markTestAsSubmitted(id);
-
-      
-        Test updatedTest = testService.getTestById(id);
-        return ResponseEntity.ok(updatedTest);
+//    @PostMapping("/submit")
+//    public ResponseEntity<Test> disableAndSubmit(@RequestParam int id) {
+//   
+//        testService.disableTest(id);
+//
+//       
+//        testService.markTestAsSubmitted(id);
+//
+//      
+//        Test updatedTest = testService.getTestById(id);
+//        return ResponseEntity.ok(updatedTest);
+//    }
+    @PostMapping("/submit/{id}")
+    public ResponseEntity<String> updateTestStatus(@PathVariable int id) {
+        boolean updated = testService.updateActionAndDisable(id);
+        if (updated) {
+            return ResponseEntity.ok("Test status updated after submission.");
+        } else {
+            return ResponseEntity.status(404).body("Test not found.");
+        }
     }
+
 
 //    disabled
 

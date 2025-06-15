@@ -42,8 +42,24 @@ public class TestRepository {
 
     // Get all tests with join on batch and course
     public List<Test> getAllTestsWithJoin() {
-        String sql = "select t.id, b.batch_name, c.course_name, t.date, t.time, t.mode, t.action, t.disable, t.ispaperSet " +
-                     "from test t join batch b ON t.batch_id = b.id join course c ON t.course_id = c.id";
+        String sql = """
+            SELECT 
+                t.id,
+                b.batch_name,
+                c.course_name,
+                t.date,
+                t.time,
+                t.mode,
+                t.disable,
+                t.action,
+                t.isPaperset,
+                GROUP_CONCAT(tr.student_id) AS submitted_student_ids
+            FROM test t
+            JOIN batch b ON t.batch_id = b.id
+            JOIN course c ON t.course_id = c.id
+            LEFT JOIN test_result tr ON tr.test_id = t.id
+            GROUP BY t.id, b.batch_name, c.course_name, t.date, t.time, t.mode, t.disable, t.action, t.isPaperset
+        """;
 
         return jdbcTemplate.query(sql, new RowMapper<Test>() {
             @Override
@@ -57,29 +73,81 @@ public class TestRepository {
                 test.setMode(rs.getString("mode"));
                 test.setAction(rs.getBoolean("action"));
                 test.setDisable(rs.getBoolean("disable"));
-                test.setIspaperSet(rs.getBoolean("ispaperSet"));
+                test.setIspaperSet(rs.getBoolean("isPaperset"));
+                test.setSubmittedStudentIds(rs.getString("submitted_student_ids") != null ? rs.getString("submitted_student_ids") : "");
                 return test;
             }
         });
     }
+    
+    
+    public void updateSubmittedStudentIds(int testId) {
+        String sql = """
+            UPDATE test
+            SET submitted_student_ids = (
+                SELECT GROUP_CONCAT(student_id)
+                FROM test_result
+                WHERE test_id = ?
+            )
+            WHERE id = ?
+        """;
+        jdbcTemplate.update(sql, testId, testId);
+    }
+
+
 //Action Logic
 
-    public int updateActionAfterSubmission(int id) {
-        String sql = "UPDATE test SET action = false WHERE id = ?";
-        System.out.println("Executing SQL: " + sql + " with ID: " + id); // Add this log
-        return jdbcTemplate.update(sql, id);
-    }
-    
-    public Test findById(int id) {
-        String sql = "SELECT * FROM test WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Test.class), id);
-    }
-//    disabled
-
+//    public int updateActionAfterSubmission(int id) {
+//        String sql = "UPDATE test SET action = 0 WHERE id = ? and submittedStudentIds = ?";
+//        System.out.println("Executing SQL: " + sql + " with ID: " + id); // Add this log
+//        return jdbcTemplate.update(sql, id);
+//    }
+//    
+//    public Test findById(int id) {
+//        String sql = "SELECT * FROM test WHERE id = ?";
+//        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Test.class), id);
+//    }
+////    disabled
+//
     public void disableTest(int id) {
-        String sql = "UPDATE test SET disable = true WHERE id = ?";
+        String sql = "UPDATE test SET disable = 1 WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
+
+
+
+//    public int updateActionAndDisableBasedOnSubmission() {
+//        String sql = "UPDATE test t SET " +
+//                     "action = CASE WHEN EXISTS (SELECT 1 FROM test_result tr WHERE tr.test_id = t.id) THEN 0 ELSE 1 END, " +
+//                     "disable = CASE WHEN EXISTS (SELECT 1 FROM test_result tr WHERE tr.test_id = t.id) THEN 1 ELSE 0 END";
+//        return jdbcTemplate.update(sql);
+//    }
+
+    
+    public int updateActionAndDisable(int testId) {
+        String sql = """
+            UPDATE test t 
+            SET 
+                action = CASE 
+                            WHEN EXISTS (
+                                SELECT 1 FROM test_result tr 
+                                WHERE tr.test_id = t.id AND tr.test_id = ?
+                            ) THEN 0 
+                            ELSE 1 
+                         END,
+                disable = CASE 
+                            WHEN EXISTS (
+                                SELECT 1 FROM test_result tr 
+                                WHERE tr.test_id = t.id AND tr.test_id = ?
+                            ) THEN 1 
+                            ELSE disable 
+                         END
+            WHERE t.id = ?
+        """;
+        return jdbcTemplate.update(sql, testId, testId, testId);
+    }
+
+   
     // Disable a test by ID
 //    public boolean disableTest(int id) {
 //        String sql = "UPDATE test SET disable = true WHERE id = ?";
