@@ -96,70 +96,15 @@ public class TestRepository {
 
 
 //Action Logic
-
-//    public int updateActionAfterSubmission(int id) {
-//        String sql = "UPDATE test SET action = 0 WHERE id = ? and submittedStudentIds = ?";
-//        System.out.println("Executing SQL: " + sql + " with ID: " + id); // Add this log
-//        return jdbcTemplate.update(sql, id);
-//    }
-//    
-//    public Test findById(int id) {
-//        String sql = "SELECT * FROM test WHERE id = ?";
-//        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Test.class), id);
-//    }
-////    disabled
-//
-    public void disableTest(int id) {
-        String sql = "UPDATE test SET disable = 1 WHERE id = ?";
-        jdbcTemplate.update(sql, id);
+    public int updateDisableFlag(int id, boolean value) {
+        String sql = "UPDATE test SET disable = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, value, id);
     }
 
-
-
-//    public int updateActionAndDisableBasedOnSubmission() {
-//        String sql = "UPDATE test t SET " +
-//                     "action = CASE WHEN EXISTS (SELECT 1 FROM test_result tr WHERE tr.test_id = t.id) THEN 0 ELSE 1 END, " +
-//                     "disable = CASE WHEN EXISTS (SELECT 1 FROM test_result tr WHERE tr.test_id = t.id) THEN 1 ELSE 0 END";
-//        return jdbcTemplate.update(sql);
-//    }
-
-    
-    public int updateActionAndDisable(int testId) {
-        String sql = """
-            UPDATE test t 
-            SET 
-                action = CASE 
-                            WHEN EXISTS (
-                                SELECT 1 FROM test_result tr 
-                                WHERE tr.test_id = t.id AND tr.test_id = ?
-                            ) THEN 0 
-                            ELSE 1 
-                         END,
-                disable = CASE 
-                            WHEN EXISTS (
-                                SELECT 1 FROM test_result tr 
-                                WHERE tr.test_id = t.id AND tr.test_id = ?
-                            ) THEN 1 
-                            ELSE disable 
-                         END
-            WHERE t.id = ?
-        """;
-        return jdbcTemplate.update(sql, testId, testId, testId);
+    public int updateActionFlag(int id, boolean value) {
+        String sql = "UPDATE test SET action = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, value, id);
     }
-
-   
-    // Disable a test by ID
-//    public boolean disableTest(int id) {
-//        String sql = "UPDATE test SET disable = true WHERE id = ?";
-//        int rows = jdbcTemplate.update(sql, new PreparedStatementSetter() {
-//            @Override
-//            public void setValues(PreparedStatement ps) throws SQLException {
-//                ps.setInt(1, id);
-//            }
-//        });
-//        return rows > 0;
-//    }
-
 
     // Search tests by keyword (batch or course name)
     public List<Test> searchTests(String keyword) {

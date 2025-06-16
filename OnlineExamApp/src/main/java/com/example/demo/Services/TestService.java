@@ -30,36 +30,14 @@ public class TestService {
     
 
 //Action
-//    
-//    public boolean markTestAsSubmitted(int id) {
-//        System.out.println("Marking test " + id + " as submitted."); // Add this log
-//        int rowsUpdated = testRepository.updateActionAfterSubmission(id);
-//        System.out.println("Number of rows updated: " + rowsUpdated + " for test ID: " + id); // Add this log
-//        return rowsUpdated > 0;
-//    }
-//    
-//    public Test getTestById(int id) {
-//        return testRepository.findById(id); // Implement this
-//    }
-//
-//disable
-    public void disableTest(int id) {
-        testRepository.disableTest(id);
-    }
-    
-    
-    public boolean updateActionAndDisable(int testId) {
-        int updated = testRepository.updateActionAndDisable(testId);
-        return updated > 0;
+    public int disableTest(int id) {
+        return testRepository.updateDisableFlag(id, true);
     }
 
+    public int updateAction(int id) {
+        return testRepository.updateActionFlag(id, false);
+    }
 
-//    public boolean disableTest(int id) {
-//       return testRepository.disableTest(id);
-//    }
-//    public List<Test> getEnabledTests() {
-//        return testRepository.getEnabledTests();
-//    }
     
 //    search test
 
