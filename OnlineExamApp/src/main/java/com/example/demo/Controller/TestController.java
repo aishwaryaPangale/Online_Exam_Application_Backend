@@ -41,37 +41,21 @@ public class TestController {
     }
 
 //action 
-//    @PostMapping("/submit")
-//    public ResponseEntity<Test> disableAndSubmit(@RequestParam int id) {
-//   
-//        testService.disableTest(id);
-//
-//       
-//        testService.markTestAsSubmitted(id);
-//
-//      
-//        Test updatedTest = testService.getTestById(id);
-//        return ResponseEntity.ok(updatedTest);
-//    }
-    @PostMapping("/submit/{id}")
-    public ResponseEntity<String> updateTestStatus(@PathVariable int id) {
-        boolean updated = testService.updateActionAndDisable(id);
-        if (updated) {
-            return ResponseEntity.ok("Test status updated after submission.");
-        } else {
-            return ResponseEntity.status(404).body("Test not found.");
-        }
-    }
-
-
-//    disabled
-
     @PutMapping("/disable/{id}")
     public ResponseEntity<String> disableTest(@PathVariable int id) {
-        testService.disableTest(id);
-        return ResponseEntity.ok("Test disabled successfully");
+        System.out.println("Received request to disable test with ID: " + id);
+        int rows = testService.disableTest(id);
+        return rows > 0 ? ResponseEntity.ok("Test disabled.") :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found.");
     }
 
+    @PutMapping("/submit/{id}")
+    public ResponseEntity<String> updateTestAction(@PathVariable int id) {
+        System.out.println("Received request to update action for test with ID: " + id);
+        int rows = testService.updateAction(id);
+        return rows > 0 ? ResponseEntity.ok("Test action updated.") :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Test not found.");
+    }
 //search test
     @GetMapping("/search")
     public List<Test> searchTests(@RequestParam String keyword) {
