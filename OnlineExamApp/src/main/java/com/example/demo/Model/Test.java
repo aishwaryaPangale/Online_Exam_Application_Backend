@@ -12,7 +12,9 @@ public class Test {
 	private String date;
 	private String time;
 	private String mode;
+	private int studentId;
 	private boolean disable;
 	private boolean action;
 	private boolean ispaperSet;
+	private String submittedStudentIds;
 }

@@ -231,12 +231,12 @@ public class RegisterRepoImpl {
         return result.isEmpty() ? 0 : result.get(0); // If result is empty, return 0
     }
     public int getAttendedStudentCount() {
-        String sql = " SELECT COUNT(*) FROM students WHERE name IN (SELECT DISTINCT student_username FROM test_result);";
+        String sql = " SELECT COUNT(*) FROM students WHERE name IN (SELECT DISTINCT student_id FROM test_result);";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
 
     public int getNotAttendedStudentCount() {
-        String sql = " SELECT COUNT(*) FROM students WHERE name NOT IN (SELECT DISTINCT student_username FROM test_result)";
+        String sql = " SELECT COUNT(*) FROM students WHERE name NOT IN (SELECT DISTINCT student_id FROM test_result)";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
     
