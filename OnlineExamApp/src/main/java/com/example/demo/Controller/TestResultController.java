@@ -93,4 +93,9 @@ public class TestResultController {
     public List<TestResult> getAllTestResults() {
         return testResultService.getAllTestResults();
     }
+    
+    @GetMapping("/report/summary")
+    public Map<String, Object> getStudentReportSummary(@RequestParam String username) {
+        return testResultService.getStudentSummary(username);
+    }
 }

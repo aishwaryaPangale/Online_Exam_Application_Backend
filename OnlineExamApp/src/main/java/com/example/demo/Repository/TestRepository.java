@@ -53,7 +53,7 @@ public class TestRepository {
                 t.disable,
                 t.action,
                 t.isPaperset,
-                GROUP_CONCAT(tr.student_id) AS submitted_student_ids
+               GROUP_CONCAT(DISTINCT tr.student_id) AS submitted_student_ids
             FROM test t
             JOIN batch b ON t.batch_id = b.id
             JOIN course c ON t.course_id = c.id
@@ -71,8 +71,8 @@ public class TestRepository {
                 test.setDate(rs.getString("date"));
                 test.setTime(rs.getString("time"));
                 test.setMode(rs.getString("mode"));
-                test.setAction(rs.getBoolean("action"));
-                test.setDisable(rs.getBoolean("disable"));
+                test.setAction(rs.getInt("action"));
+                test.setDisable(rs.getInt("disable"));
                 test.setIspaperSet(rs.getBoolean("isPaperset"));
                 test.setSubmittedStudentIds(rs.getString("submitted_student_ids") != null ? rs.getString("submitted_student_ids") : "");
                 return test;
@@ -96,16 +96,25 @@ public class TestRepository {
 
 
 //Action Logic
-    public int updateDisableFlag(int id, boolean value) {
-        String sql = "UPDATE test SET disable = ? WHERE id = ?";
-        return jdbcTemplate.update(sql, value, id);
+ // Disable the test ONLY IF students have submitted it
+    public boolean disableTestIfSubmitted(int testId) {
+        String checkSql = "SELECT COUNT(*) FROM test_result WHERE test_id = ?";
+        Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, testId);
+
+        if (count != null && count > 0) {
+            String updateSql = "UPDATE test SET disable = true, action = false WHERE id = ?";
+            jdbcTemplate.update(updateSql, testId);
+            return true;
+        }
+        return false; // No submission, don't disable
     }
 
-    public int updateActionFlag(int id, boolean value) {
-        String sql = "UPDATE test SET action = ? WHERE id = ?";
-        return jdbcTemplate.update(sql, value, id);
-    }
 
+    public int updateActionAndDisable(int id) {
+        String sql = "UPDATE test SET action = false WHERE id = ?";
+        return jdbcTemplate.update(sql, id);
+    }
+    
     // Search tests by keyword (batch or course name)
     public List<Test> searchTests(String keyword) {
         String sql = "select t.id, b.batch_name, c.course_name, t.date, t.time, t.mode from test t join batch b ON t.batch_id = b.id join course c ON t.course_id = c.id WHERE LOWER(b.batch_name) LIKE ? OR LOWER(c.course_name) LIKE ?";

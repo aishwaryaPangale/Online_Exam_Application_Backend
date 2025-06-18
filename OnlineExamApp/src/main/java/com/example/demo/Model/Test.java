@@ -13,8 +13,8 @@ public class Test {
 	private String time;
 	private String mode;
 	private int studentId;
-	private boolean disable;
-	private boolean action;
+	private int disable;
+	private int action;
 	private boolean ispaperSet;
 	private String submittedStudentIds;
 }
