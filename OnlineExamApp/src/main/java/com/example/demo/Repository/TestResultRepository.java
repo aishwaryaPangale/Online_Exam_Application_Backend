@@ -57,18 +57,60 @@ public class TestResultRepository {
 
     // Retrieve all test results
     public List<TestResult> getAllTestResults() {
-        String sql = "SELECT * FROM test_result";
+        String sql = """
+            SELECT tr.test_id, tr.total_questions, tr.attempted_questions,
+                   tr.correct_answers, tr.wrong_answers, tr.total_marks,
+                   s.name AS student_name
+            FROM test_result tr
+            JOIN students s ON tr.student_id = s.id
+        """;
+
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             TestResult result = new TestResult();
-            result.setStudentId(rs.getInt("student_id"));
             result.setTestId(rs.getInt("test_id"));
             result.setTotalQuestions(rs.getInt("total_questions"));
             result.setAttemptedQuestions(rs.getInt("attempted_questions"));
             result.setCorrectAnswers(rs.getInt("correct_answers"));
             result.setWrongAnswers(rs.getInt("wrong_answers"));
             result.setTotalMarks(rs.getInt("total_marks"));
-            result.setRemainingQuestions(result.getTotalQuestions() - result.getAttemptedQuestions());
+            result.setStudentName(rs.getString("student_name")); // Important!
             return result;
+        });
+    }
+
+    
+    public int countTestsAttended(String username) {
+        String sql = "SELECT COUNT(*) FROM test_result WHERE student_id = " +
+                     "(SELECT id FROM students WHERE username = ?)";
+        return jdbcTemplate.queryForObject(sql, Integer.class, username);
+    }
+
+    // Total tests available for the student's batch
+    public int countTotalTestsForStudent(String username) {
+        String sql = """
+            SELECT COUNT(*) 
+            FROM test t
+            JOIN students s ON s.batch = (SELECT batch FROM students WHERE username = ?)
+            WHERE t.batch_id = (SELECT id FROM batch WHERE batch_name = s.batch)
+              AND t.isPaperSet = 1
+        """;
+        return jdbcTemplate.queryForObject(sql, Integer.class, username);
+    }
+
+    // Test scores with testId and total marks
+    public List<Map<String, Object>> getScores(String username) {
+        String sql = """
+            SELECT tr.test_id, tr.total_marks
+            FROM test_result tr
+            JOIN students s ON tr.student_id = s.id
+            WHERE s.username = ?
+        """;
+
+        return jdbcTemplate.query(sql, new Object[]{username}, (rs, rowNum) -> {
+            Map<String, Object> score = new HashMap<>();
+            score.put("testId", rs.getInt("test_id"));
+            score.put("total_marks", rs.getInt("total_marks"));
+            return score;
         });
     }
 }

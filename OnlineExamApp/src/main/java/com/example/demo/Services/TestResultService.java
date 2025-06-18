@@ -1,5 +1,6 @@
 package com.example.demo.Services;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,21 @@ public class TestResultService {
 
     public List<TestResult> getAllTestResults() {
         return repository.getAllTestResults();
+    }
+    
+    
+    public Map<String, Object> getStudentSummary(String username) {
+        int attended = repository.countTestsAttended(username);
+        int totalTests = repository.countTotalTestsForStudent(username);
+
+        List<Map<String, Object>> scores = repository.getScores(username);
+
+        int notAttended = totalTests - attended;
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("attended", attended);
+        response.put("notAttended", Math.max(notAttended, 0));
+        response.put("scores", scores);
+        return response;
     }
 }

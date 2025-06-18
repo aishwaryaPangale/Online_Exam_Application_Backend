@@ -30,12 +30,12 @@ public class TestService {
     
 
 //Action
-    public int disableTest(int id) {
-        return testRepository.updateDisableFlag(id, true);
+    public boolean disableTestById(int testId) {
+        return testRepository.disableTestIfSubmitted(testId);
     }
 
-    public int updateAction(int id) {
-        return testRepository.updateActionFlag(id, false);
+    public int updateActionAndDisable(int id) {
+        return testRepository.updateActionAndDisable(id);
     }
 
     

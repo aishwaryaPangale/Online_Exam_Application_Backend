@@ -13,4 +13,6 @@ public class TestResult {
     private int correctAnswers;
     private int wrongAnswers;
     private int totalMarks;
+    private String studentName;
+
 }
